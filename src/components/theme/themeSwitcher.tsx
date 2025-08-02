@@ -1,20 +1,35 @@
-// components/theme-toggle.tsx
-import { useEffect, useState } from "react"
-import { Button } from "../ui/button"
 
-export const ThemeSwitcher = () => {
-    const [theme, setTheme] = useState("light")
+// import { useTheme, type ThemeType } from "./theme-provider"
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-    useEffect(() => {
-        document.documentElement.classList.toggle("dark", theme === "dark")
-    }, [theme])
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { useTheme, type ThemeType } from "./themeProvider";
+
+
+
+const themes: { value: ThemeType; label: string }[] = [
+    { value: "light", label: "Light" },
+    { value: "dark", label: "Dark Sidebar" },
+    { value: "colorful", label: "Colorful" },
+]
+
+export function ThemeSwitcher() {
+    const { theme, setTheme } = useTheme()
 
     return (
-        <Button
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-            className="red-500"
-        >
-            Toggle {theme === "light" ? "🌙 Dark" : "☀️ Light"}
-        </Button>
+        <div className="flex items-center gap-3">
+            <Select value={theme} onValueChange={(value: ThemeType) => setTheme(value)}>
+                <SelectTrigger className="w-[140px]" id="theme-select">
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    {themes.map((t) => (
+                        <SelectItem key={t.value} value={t.value}>
+                            {t.label}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+        </div>
     )
 }
